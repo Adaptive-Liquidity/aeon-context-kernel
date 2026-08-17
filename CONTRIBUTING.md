@@ -35,6 +35,8 @@ Generated benchmark artifacts belong in local result directories or a versioned 
 
 A pull request must explain the intended behavior, trust/security impact, files changed, negative and positive tests, version or canonical-hash impact, and any gate not run. Changes affecting receipts, traces, scenarios, metrics, or reports must state how reproducibility was checked.
 
+Pull requests may be queued for repository-native squash auto-merge. They merge only after the required project CI, CodeRabbit, and Cursor Bugbot checks succeed and all actionable review conversations are fixed and resolved. New commits dismiss stale results and restart the gates. Contributors must not resolve a thread merely to make the merge button available; the fix or reasoned disposition must be visible in the pull request.
+
 | Change type | Minimum evidence |
 |---|---|
 | Provenance, schema, or admission | Adversarial authority-claim tests and valid-admission tests. |

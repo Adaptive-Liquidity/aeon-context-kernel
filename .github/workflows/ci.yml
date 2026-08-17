@@ -47,4 +47,5 @@ jobs:
           name: deterministic-smoke-${{ github.sha }}
           path: .ci-results/
           if-no-files-found: error
+          include-hidden-files: true
           retention-days: 14

@@ -15,6 +15,7 @@ results/*
 !results/.gitkeep
 .ci-results/
 .official-ci-results/
+.release-ci-results/
 
 # Local configuration and credentials.
 .env

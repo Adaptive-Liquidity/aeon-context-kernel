@@ -27,6 +27,12 @@ List focused negative and positive tests. Check the gates that passed:
 - [ ] `uv run pytest`
 - [ ] `uv run ckernel bench smoke --results-root .ci-results`
 
+## Auto-merge readiness
+
+- [ ] Required repository checks have completed successfully.
+- [ ] Every actionable review conversation has been fixed or given a documented disposition and resolved.
+- [ ] I understand that new commits restart the merge gates.
+
 ## Claim boundary
 
 - [ ] Documentation does not describe simulator outputs as real-model efficacy evidence.

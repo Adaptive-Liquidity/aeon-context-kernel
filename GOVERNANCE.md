@@ -6,7 +6,14 @@ The repository owner is the final maintainer for merges, releases, security emba
 
 ## Branch and merge policy
 
-`main` is the canonical branch. Changes should arrive through pull requests with passing CI. Direct force pushes and branch deletion should be blocked. At least one approving review should be required when more than one maintainer or reviewer is available; an author must not treat their own review as an independent security review.
+`main` is the canonical branch. Changes arrive through pull requests; direct force pushes and branch deletion are blocked. Repository-native auto-merge may use **squash merge only** and may complete only when the branch is current, every required check succeeds, and every review conversation is resolved.
+
+| Required merge gate | Purpose |
+|---|---|
+| `Python 3.12 quality and deterministic smoke` | Formatting, lint, strict typing, behavior tests, coverage diagnostics, and simulator-only smoke evidence. |
+| Resolved review conversations | Every actionable human or automated inline comment must be fixed or given a documented disposition before resolution and merge. |
+
+CodeRabbit and Cursor Bugbot may supply useful review feedback, but their availability and reporting modes are not reliable merge-status contracts; their actionable findings must be handled through review conversations. Auto-merge must never dismiss comments, resolve threads without addressing them, waive a failed check, or bypass branch protection. The repository may automatically queue eligible Dependabot updates for this same native auto-merge path; they still remain blocked until required CI passes and review conversations are resolved. If the required CI integration becomes unavailable, the pull request remains blocked until a maintainer deliberately changes this policy and the repository rule. At least one approving human review should be required when a second qualified maintainer or reviewer is available; an author must not treat their own review as independent security review evidence.
 
 ## Milestone gates
 
