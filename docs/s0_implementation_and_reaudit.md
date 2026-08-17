@@ -55,7 +55,7 @@ Version `0.2.1` requires pytest `>=9.0.3,<10`; the regenerated lock resolves pyt
 
 ## Fresh deterministic evidence and reproducibility audit
 
-Fresh artifacts are at [`results/s0-provenance-v2-final`](../results/s0-provenance-v2-final). The published chart/report copies were generated from saved metrics after report regeneration; the original fresh execution root is retained separately at `results/s0-provenance-v2`.
+Fresh artifacts are deliberately excluded from source control and preserved in the [v0.2.1 audit release](https://github.com/Adaptive-Liquidity/aeon-context-kernel/releases/tag/v0.2.1), with the audit-package contents and scope recorded in [`docs/releases/v0.2.1-s0.md`](releases/v0.2.1-s0.md). The published chart/report copies were generated from saved metrics after report regeneration; the original fresh execution root was retained separately during the local evidence run.
 
 | Stage | Runs | Passive artifact audit | Full logical replays | Result |
 |---|---:|---:|---:|---|
@@ -66,13 +66,13 @@ Fresh artifacts are at [`results/s0-provenance-v2-final`](../results/s0-provenan
 
 The passive auditor is a standard-library, non-project-import structural check. It reconciled manifests, run IDs, JSON/JSONL structure, receipts, metrics, report derivations, event chains, trace footers, and decision hashes. Full replay then re-executed every final stored trace with the project CLI and reproduced its canonical decision-trace hash. This satisfies a **tool-independent reproducibility check**, but is not an external independent security review.
 
-The finalized reusable concept-evidence suite also passed. It ran project tests, S0 claim-specific tests, a separately fresh four-run smoke stage, a passive audit, and four full replays. Its machine-readable and rendered reports are in [`results/s0-provenance-v2-final/concept-evidence`](../results/s0-provenance-v2-final/concept-evidence).
+The finalized reusable concept-evidence suite also passed. It ran project tests, S0 claim-specific tests, a separately fresh four-run smoke stage, a passive audit, and four full replays. Its machine-readable and rendered reports are preserved in the v0.2.1 audit-release evidence archive rather than the source tree.
 
 The first attempt exposed an obsolete claim-test template that used raw caller trust and the pre-S0 admission API. That output was preserved in the non-final evidence root. The local audit skill was then updated to construct verifier-issued segments and to scope C3 to **verified principal required constraints only**; it no longer represents trusted invariant residency as demonstrated. The refreshed skill package and final concept-evidence run passed.
 
 ## Visual validation
 
-The full-stage chart is attached to the final evidence root and documented in [`visual_validation.md`](../results/s0-provenance-v2-final/visual_validation.md). It reads **“Deterministic Context-Kernel Conformance,”** identifies local simulator conformance/regression output, and labels the y-axis as scheduled fixture violations. It does not present itself as an efficacy or real-model survival curve.
+The full-stage chart and visual-validation record are preserved in the v0.2.1 audit-release evidence archive. The chart reads **“Deterministic Context-Kernel Conformance,”** identifies local simulator conformance/regression output, and labels the y-axis as scheduled fixture violations. It does not present itself as an efficacy or real-model survival curve.
 
 ## Explicit residual risks and stop gate
 
