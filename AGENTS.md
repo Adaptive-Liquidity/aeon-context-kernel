@@ -15,12 +15,10 @@ Repository-native **squash auto-merge** may be queued only after feedback is add
 | Gate | Requirement |
 |---|---|
 | Project CI | `Python 3.12 quality and deterministic smoke` succeeds on the current head. |
-| Automated review | `CodeRabbit` succeeds. |
-| Automated bug review | `Cursor Bugbot` succeeds. |
-| Review conversations | Every actionable inline thread is fixed or given a documented disposition and resolved. |
+| Review conversations | Every actionable inline thread—human or automated—is fixed or given a documented disposition and resolved. |
 | Branch state | The branch is current with protected `main`. |
 
-Never dismiss a comment, resolve a thread without addressing it, weaken a required check, or bypass branch protection to force a merge. New commits restart the gates.
+CodeRabbit and Cursor Bugbot may add review feedback, but their service availability and reporting mode are not reliable status contexts; actionable findings must instead be handled as review conversations. Never dismiss a comment, resolve a thread without addressing it, weaken a required check, or bypass branch protection to force a merge. New commits restart the gates. Eligible Dependabot updates may be automatically queued for this same native path, but they do not receive a bypass or an automatic approval.
 
 ## Environment and quality gates
 
