@@ -20,7 +20,7 @@ Repository-native **squash auto-merge** may be queued only after feedback is add
 | Review conversations | Every actionable inline thread is fixed or given a documented disposition and resolved. |
 | Branch state | The branch is current with protected `main`. |
 
-Never dismiss a comment, resolve a thread without addressing it, weaken a required check, or bypass branch protection to force a merge. New commits restart the gates.
+Never dismiss a comment, resolve a thread without addressing it, weaken a required check, or bypass branch protection to force a merge. New commits restart the gates. Eligible Dependabot updates may be automatically queued for this same native path, but they do not receive a bypass or an automatic approval.
 
 ## Environment and quality gates
 

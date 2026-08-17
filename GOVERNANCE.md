@@ -15,7 +15,7 @@ The repository owner is the final maintainer for merges, releases, security emba
 | `Cursor Bugbot` | Automated bug review completion; a failure or pending review blocks merge. |
 | Resolved review conversations | Actionable inline comments must be fixed or explicitly resolved before merge. |
 
-Auto-merge must never dismiss comments, resolve threads without addressing them, waive a failed check, or bypass branch protection. If a required integration becomes unavailable, the pull request remains blocked until a maintainer deliberately changes this policy and the repository rule. At least one approving human review should be required when a second qualified maintainer or reviewer is available; an author must not treat their own review as independent security review evidence.
+Auto-merge must never dismiss comments, resolve threads without addressing them, waive a failed check, or bypass branch protection. The repository may automatically queue eligible Dependabot updates for this same native auto-merge path; they still remain blocked until all required checks pass and review conversations are resolved. If a required integration becomes unavailable, the pull request remains blocked until a maintainer deliberately changes this policy and the repository rule. At least one approving human review should be required when a second qualified maintainer or reviewer is available; an author must not treat their own review as independent security review evidence.
 
 ## Milestone gates
 
