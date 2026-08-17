@@ -36,9 +36,9 @@ Security = "https://github.com/Adaptive-Liquidity/aeon-context-kernel/blob/main/
 
 [project.optional-dependencies]
 dev = [
-  "mypy>=1.11,<2",
+  "mypy>=1.11,<3",
   "pytest>=9.0.3,<10",
-  "pytest-cov>=5,<7",
+  "pytest-cov>=5,<8",
   "ruff>=0.6,<1",
   "types-jsonschema>=4.23,<5",
 ]
