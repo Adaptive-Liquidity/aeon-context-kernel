@@ -10,9 +10,9 @@
 
 | Item | Reviewer entry |
 |---|---|
-| Archive name | `AEON_Context_Kernel_S0_v0.2.0.zip` |
+| Archive name | `AEON_Context_Kernel_S0_v0.2.1.zip` |
 | Archive SHA-256 observed | |
-| Expected SHA-256 | `c8ff9a23c1f50e863aea3de2df8abaf99468ae2b348296ecdaa72448414d1f36` |
+| Expected SHA-256 | Copy the archive entry from the attached `SHA256SUMS.txt` |
 | Checksum matched | Yes / No |
 | Operating system | |
 | Python version | |
@@ -26,7 +26,7 @@ List every command run, including exit status. Attach unedited console logs or p
 
 | Command | Exit status | Result / log reference |
 |---|---:|---|
-| `uv sync --extra dev` | | |
+| `uv sync --extra dev --locked` | | |
 | `uv run pytest` | | |
 | `uv run ruff format --check .` | | |
 | `uv run ruff check .` | | |
