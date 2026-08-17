@@ -9,6 +9,12 @@ description: Authoring and extension workflow for the AEON Context Survival Benc
 
 Extend the benchmark as a deterministic regression oracle rather than a model-quality claim. Keep scenario ground truth explicit, all required effects in memory, and all required scoring free of provider calls or LLM judges.
 
+## Official repository and merge gate
+
+Use `https://github.com/Adaptive-Liquidity/aeon-context-kernel` as canonical. The current audit candidate is `v0.2.1`; deterministic simulator stages remain conformance/regression evidence, and independent S0 security review is still pending. Do not start S1, provider, real-effect, AEON-IQ, or real-model study implementation before that gate passes.
+
+Make changes on a focused branch and pull request, never directly on protected `main`. Repository-native squash auto-merge may complete only after the project CI, CodeRabbit, and Cursor Bugbot checks pass and all actionable review conversations are fixed or given a documented disposition and resolved.
+
 ## Boundary with blinded real-model studies
 
 Do not add provider calls, real effects, model-selected scenario outcomes, or LLM-judge scoring to the required smoke, pilot, full, or concept-evidence path. If a request asks whether typed context changes real-model behavior, create a separately versioned, explicitly opt-in study layer that consumes the same hardened scenario fixtures but never changes their deterministic ground truth. Keep treatment assignment hidden from the model, score model proposals from independent task state, separate proposal behavior from enforce-mode execution outcomes, record provider/version/decoding provenance, and label the result as bounded experimental evidence rather than a benchmark regression result. Read the companion kernel-engineering contract for trusted provenance and the reproducibility-audit claim boundary before authoring that layer.
@@ -58,12 +64,12 @@ Test the narrow extension first. Assert logical outcomes and simulator state, no
 
 ### 6. Execute stages in order
 
-Run stages sequentially:
+Install the committed environment with `uv sync --extra dev --locked`, then run stages sequentially into an explicit results root:
 
 ```bash
-uv run ckernel bench smoke
-uv run ckernel bench pilot
-uv run ckernel bench full
+uv run ckernel bench smoke --results-root results
+uv run ckernel bench pilot --results-root results
+uv run ckernel bench full --results-root results
 ```
 
 Smoke must pass before pilot. Pilot must pass before full. Do not run full merely because it exists; use it for a reference result, release evidence, or a user-requested complete matrix.

@@ -11,6 +11,12 @@ Verify what the AEON implementation and its artifacts actually prove. Distinguis
 
 Default to passive inspection. Never repair, normalize, or rewrite supplied traces and receipts in place.
 
+## Official repository and current gate
+
+Use `https://github.com/Adaptive-Liquidity/aeon-context-kernel` as canonical. The current audit candidate is `v0.2.1`, which retains S0 runtime behavior and patches the audit/test environment for `PYSEC-2026-1845` with pytest `>=9.0.3`. Independent S0 security review remains pending; do not treat repository CI, bot review, replay, or this workflow as that external review.
+
+For repository changes, record the pull request, source commit, required project CI, CodeRabbit, Cursor Bugbot, unresolved-conversation count, and squash merge commit. Protected auto-merge is acceptable only when every required check succeeds and all actionable review conversations are fixed or given a documented disposition and resolved. Never weaken the rule or dismiss feedback to obtain a merge.
+
 ## Select an audit mode
 
 | User goal | Minimum audit |
@@ -21,7 +27,7 @@ Default to passive inspection. Never repair, normalize, or rewrite supplied trac
 | Validate a result directory | Passive artifact audit, count reconciliation, replay sweep, report regeneration on a copy |
 | Validate a benchmark stage | Source gates, stage run, artifact audit, every-trace replay, report check |
 | Diagnose a regression | Preserve both artifact sets, compare manifests/versions/hashes, then follow failure triage |
-| Prepare release evidence | Full gate matrix, staged smoke/pilot/full, all replays, deterministic report comparison, limitations statement |
+| Prepare release evidence | Protected-merge evidence, full gate matrix, staged smoke/pilot/full, all replays, deterministic report comparison, dependency audit, limitations statement |
 
 Read [`references/concept-claim-boundaries.md`](references/concept-claim-boundaries.md) before making any statement that AEON has proven its concept. Use [`references/concept-evidence-design.md`](references/concept-evidence-design.md) to understand the suite. Read [`references/gate-matrix.md`](references/gate-matrix.md) to select commands. Read [`references/failure-triage.md`](references/failure-triage.md) after any failed check.
 
@@ -71,7 +77,7 @@ Treat a nonzero exit as a failed audit. Preserve the JSON output as evidence.
 From the repository root, follow the selected gate set. A release-grade default is:
 
 ```bash
-uv sync --extra dev
+uv sync --extra dev --locked
 uv run ruff format --check src tests examples
 uv run pytest --cov=context_kernel --cov=survival_bench --cov-report=term
 uv run ruff check .
