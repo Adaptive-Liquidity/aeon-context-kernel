@@ -6,7 +6,16 @@ The repository owner is the final maintainer for merges, releases, security emba
 
 ## Branch and merge policy
 
-`main` is the canonical branch. Changes should arrive through pull requests with passing CI. Direct force pushes and branch deletion should be blocked. At least one approving review should be required when more than one maintainer or reviewer is available; an author must not treat their own review as an independent security review.
+`main` is the canonical branch. Changes arrive through pull requests; direct force pushes and branch deletion are blocked. Repository-native auto-merge may use **squash merge only** and may complete only when the branch is current, every required check succeeds, and every review conversation is resolved.
+
+| Required merge gate | Purpose |
+|---|---|
+| `Python 3.12 quality and deterministic smoke` | Formatting, lint, strict typing, behavior tests, coverage diagnostics, and simulator-only smoke evidence. |
+| `CodeRabbit` | Automated review completion; a failure or pending review blocks merge. |
+| `Cursor Bugbot` | Automated bug review completion; a failure or pending review blocks merge. |
+| Resolved review conversations | Actionable inline comments must be fixed or explicitly resolved before merge. |
+
+Auto-merge must never dismiss comments, resolve threads without addressing them, waive a failed check, or bypass branch protection. If a required integration becomes unavailable, the pull request remains blocked until a maintainer deliberately changes this policy and the repository rule. At least one approving human review should be required when a second qualified maintainer or reviewer is available; an author must not treat their own review as independent security review evidence.
 
 ## Milestone gates
 

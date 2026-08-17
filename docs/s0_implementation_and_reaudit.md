@@ -47,6 +47,12 @@ The public package, scenario, adapter, harness, and simulator identities were ve
 | Observe/warn/enforce demo | Passed; enforce left simulated effect count at zero |
 | Local AEON skill validation | All three packages valid |
 
+## v0.2.1 audit-environment security patch
+
+After the official repository was published, GitHub and an independent `pip-audit` scan identified `PYSEC-2026-1845` (`GHSA-6w46-j5rx-g56g`) in the locked pytest `8.4.2` development dependency. The OSV advisory states that pytest through `9.0.2` on UNIX used predictable temporary-directory handling that could allow a local denial of service or possible privilege gain; `9.0.3` is the first fixed release.[1]
+
+Version `0.2.1` requires pytest `>=9.0.3,<10`; the regenerated lock resolves pytest `9.1.1`. The synchronized environment then passed all 122 tests, Ruff formatting/lint, strict Mypy, the local example, the observe/warn/enforce demo, repository metadata/link validation, and a fresh deterministic smoke stage. A repeat dependency scan reported no known third-party-package vulnerabilities. No S0 runtime behavior, scenario, adapter, predicate, or deterministic decision contract changed.
+
 ## Fresh deterministic evidence and reproducibility audit
 
 Fresh artifacts are at [`results/s0-provenance-v2-final`](../results/s0-provenance-v2-final). The published chart/report copies were generated from saved metrics after report regeneration; the original fresh execution root is retained separately at `results/s0-provenance-v2`.
@@ -82,3 +88,7 @@ The full-stage chart is attached to the final evidence root and documented in [`
 | External independent re-audit | The reproducibility audit is independent of project imports for structural checks, but it is not a third-party security assessment. |
 
 **Stop decision:** Do not proceed to S1 or any provider, real-effect, AEON-IQ, or model-study work on the strength of these results alone. The next permitted action is an external or separately staffed security re-audit of S0 and acceptance of its findings. Only after that acceptance should S1 be planned.
+
+## Reference
+
+[1] [OSV, “PYSEC-2026-1845: pytest has vulnerable tmpdir handling”](https://osv.dev/vulnerability/PYSEC-2026-1845)
