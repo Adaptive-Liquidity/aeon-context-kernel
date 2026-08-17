@@ -28,9 +28,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: >-
-          gh pr merge "$PR_NUMBER"
-          --repo "$GITHUB_REPOSITORY"
-          --auto
-          --squash
-          --delete-branch
+        run: |
+          if gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" \
+            --json autoMergeRequest --jq '.autoMergeRequest != null' | grep -qx true; then
+            echo "Native auto-merge is already queued for pull request $PR_NUMBER."
+            exit 0
+          fi
+          gh pr merge "$PR_NUMBER" \
+            --repo "$GITHUB_REPOSITORY" \
+            --auto \
+            --squash \
+            --delete-branch
