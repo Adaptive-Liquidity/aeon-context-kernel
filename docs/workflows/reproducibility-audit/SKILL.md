@@ -15,7 +15,7 @@ Default to passive inspection. Never repair, normalize, or rewrite supplied trac
 
 Use `https://github.com/Adaptive-Liquidity/aeon-context-kernel` as canonical. The current audit candidate is `v0.2.1`, which retains S0 runtime behavior and patches the audit/test environment for `PYSEC-2026-1845` with pytest `>=9.0.3`. Independent S0 security review remains pending; do not treat repository CI, bot review, replay, or this workflow as that external review.
 
-For repository changes, record the pull request, source commit, required project CI, CodeRabbit, Cursor Bugbot, unresolved-conversation count, and squash merge commit. Protected auto-merge is acceptable only when every required check succeeds and all actionable review conversations are fixed or given a documented disposition and resolved. Never weaken the rule or dismiss feedback to obtain a merge.
+For repository changes, record the pull request, source commit, stable required project CI, automated-review findings, unresolved-conversation count, and squash merge commit. Protected auto-merge is acceptable only when stable required CI succeeds and all actionable review conversations are fixed or given a documented disposition and resolved. CodeRabbit and Cursor Bugbot availability is not a required status context; record their findings when present. Never weaken the rule or dismiss feedback to obtain a merge.
 
 ## Select an audit mode
 

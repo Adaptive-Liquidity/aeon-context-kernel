@@ -13,7 +13,7 @@ Modify the kernel without weakening its trust, effect-boundary, or reproducibili
 
 Use `https://github.com/Adaptive-Liquidity/aeon-context-kernel` as the canonical repository. The current audit candidate is `v0.2.1`: S0 verifier-issued provenance and collision-safe segment identity are implemented, while independent S0 security review remains pending. Do not begin S1, provider work, real effects, AEON-IQ integration, or real-model efficacy work before that review has no unresolved Critical or High finding.
 
-Never push directly to protected `main`. Work on a focused branch and pull request. Queue repository-native squash auto-merge only after the project CI, CodeRabbit, and Cursor Bugbot checks succeed and every actionable review conversation is fixed or given a documented disposition and resolved. Never dismiss feedback or weaken a required check to make a merge proceed.
+Never push directly to protected `main`. Work on a focused branch and pull request. Queue repository-native squash auto-merge only after the stable project CI succeeds and every actionable review conversation is fixed or given a documented disposition and resolved. CodeRabbit and Cursor Bugbot feedback must be addressed when actionable, but their availability is not a required status context. Never dismiss feedback or weaken a required check to make a merge proceed.
 
 Install from the committed lock with `uv sync --extra dev --locked`. The `0.2.1` lock requires pytest `>=9.0.3` to avoid `PYSEC-2026-1845`; do not reintroduce an affected version.
 

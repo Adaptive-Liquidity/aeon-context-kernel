@@ -13,7 +13,7 @@ Extend the benchmark as a deterministic regression oracle rather than a model-qu
 
 Use `https://github.com/Adaptive-Liquidity/aeon-context-kernel` as canonical. The current audit candidate is `v0.2.1`; deterministic simulator stages remain conformance/regression evidence, and independent S0 security review is still pending. Do not start S1, provider, real-effect, AEON-IQ, or real-model study implementation before that gate passes.
 
-Make changes on a focused branch and pull request, never directly on protected `main`. Repository-native squash auto-merge may complete only after the project CI, CodeRabbit, and Cursor Bugbot checks pass and all actionable review conversations are fixed or given a documented disposition and resolved.
+Make changes on a focused branch and pull request, never directly on protected `main`. Repository-native squash auto-merge may complete only after stable project CI passes and all actionable review conversations are fixed or given a documented disposition and resolved. CodeRabbit and Cursor Bugbot feedback must be handled when actionable, but their availability is not a required status context.
 
 ## Boundary with blinded real-model studies
 
