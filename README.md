@@ -12,6 +12,7 @@
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Development setup, required checks, and claim boundaries. |
 | [`GOVERNANCE.md`](GOVERNANCE.md) | Milestone, merge, evidence, and release gates. |
 | [`docs/releases/v0.2.1-s0.md`](docs/releases/v0.2.1-s0.md) | Current security-patched S0 release and audit-evidence boundary. |
+| [`docs/audits/s0/README.md`](docs/audits/s0/README.md) | Canonical phase-by-phase independent S0 audit handoff, baseline manifest, reviewer template, and release-asset instructions. |
 
 > A guardrail asks whether a request is bad. A context kernel asks whether a long-running AI workflow is still operating within the configuration and invariants its principal established—and can produce a trace showing why.
 
