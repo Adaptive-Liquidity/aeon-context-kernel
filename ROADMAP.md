@@ -17,4 +17,4 @@ Send the frozen S0 audit package to an independent reviewer using [`docs/third_p
 
 ## Non-goals of the current release
 
-Version `0.2.0` is not a production agent runtime, provider integration, prompt-injection solution, compliance system, or proof that long-context model behavior improves. Its generated benchmark results are deterministic conformance/regression outputs only.
+Version `0.2.1` is not a production agent runtime, provider integration, prompt-injection solution, compliance system, or proof that long-context model behavior improves. Its generated benchmark results are deterministic conformance/regression outputs only.

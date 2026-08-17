@@ -14,8 +14,8 @@ Send the following archive without modifying it:
 
 | Item | What to send | Why |
 |---|---|---|
-| Frozen package | `AEON_Context_Kernel_S0_v0.2.0.zip` | Complete source, tests, documentation, local skill guidance, and generated S0 evidence. |
-| SHA-256 checksum | `c8ff9a23c1f50e863aea3de2df8abaf99468ae2b348296ecdaa72448414d1f36` | Lets the reviewer confirm they audited the intended package. |
+| Frozen package | `AEON_Context_Kernel_S0_v0.2.1.zip` | Complete source, tests, documentation, workflow snapshots, and generated S0 evidence. |
+| SHA-256 checksum | The `AEON_Context_Kernel_S0_v0.2.1.zip` entry in the `v0.2.1` release’s `SHA256SUMS.txt` | Lets the reviewer confirm they audited the intended package without relying on a checksum embedded inside that package. |
 | This brief | `docs/third_party_s0_audit_handoff.md` | Defines the permitted review scope and required evidence. |
 | Implementation record | `docs/s0_implementation_and_reaudit.md` | Explains what changed and what the internal re-audit checked. |
 | Blueprint | `docs/skill_governed_architecture_and_blind_study_blueprint.md` | States the target architecture and what remains deferred. |
@@ -33,11 +33,11 @@ The reviewer should first verify the archive checksum. If it differs, stop and r
 The package uses Python 3.12 and `uv`.
 
 ```bash
-unzip AEON_Context_Kernel_S0_v0.2.0.zip
+sha256sum --check SHA256SUMS.txt
+unzip AEON_Context_Kernel_S0_v0.2.1.zip
 cd aeon-context-kernel
-sha256sum ../AEON_Context_Kernel_S0_v0.2.0.zip
-# Confirm the result equals the checksum in this brief.
-uv sync --extra dev
+# Confirm the checksum command reports the archive as OK before unpacking it.
+uv sync --extra dev --locked
 ```
 
 Run the supplied test and source-quality checks before changing anything:
@@ -120,7 +120,7 @@ Place only the frozen archive and the following readable files into a share fold
 
 ```text
 AEON-S0-audit-handoff/
-├── AEON_Context_Kernel_S0_v0.2.0.zip
+├── AEON_Context_Kernel_S0_v0.2.1.zip
 ├── SHA256SUMS.txt
 ├── REVIEW_REQUEST.md
 ├── docs/
