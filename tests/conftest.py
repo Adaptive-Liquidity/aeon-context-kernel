@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 
+from context_kernel.admission import AdmissionPolicy
 from context_kernel.ledger import Action, ActionType
 from context_kernel.models import (
     ContextSegment,
@@ -35,6 +36,18 @@ def fixed_time() -> datetime:
 @pytest.fixture
 def provenance_authority() -> InMemoryProvenanceAuthority:
     return TEST_AUTHORITY
+
+
+def make_policy(
+    authority: InMemoryProvenanceAuthority = TEST_AUTHORITY,
+    **kwargs: Any,
+) -> AdmissionPolicy:
+    """Build an admission policy with a fixture-owned runtime clock."""
+    return AdmissionPolicy(
+        authority,
+        verification_clock=lambda: FIXED_TIME,
+        **kwargs,
+    )
 
 
 def make_raw_segment(

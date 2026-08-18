@@ -11,11 +11,11 @@ Modify the kernel without weakening its trust, effect-boundary, or reproducibili
 
 ## Official repository and current gate
 
-Use `https://github.com/Adaptive-Liquidity/aeon-context-kernel` as the canonical repository. The current audit candidate is `v0.2.1`: S0 verifier-issued provenance and collision-safe segment identity are implemented, while independent S0 security review remains pending. Do not begin S1, provider work, real effects, AEON-IQ integration, or real-model efficacy work before that review has no unresolved Critical or High finding.
+Use `https://github.com/Adaptive-Liquidity/aeon-context-kernel` as the canonical repository. The v0.2.1 external S0 review returned a Fail summary with S0-001 (High: caller-influenced provenance lifecycle time) and S0-002 (Low: caller metadata could affect compaction residency). The current `v0.2.2` remediation candidate is not audit-cleared; focused independent re-audit remains required. Do not begin S1, provider work, real effects, AEON-IQ integration, or real-model efficacy work before that review has no unresolved Critical or High finding and required fixes are independently retested.
 
 Never push directly to protected `main`. Work on a focused branch and pull request. Queue repository-native squash auto-merge only after the stable project CI succeeds and every actionable review conversation is fixed or given a documented disposition and resolved. CodeRabbit and Cursor Bugbot feedback must be addressed when actionable, but their availability is not a required status context. Never dismiss feedback or weaken a required check to make a merge proceed.
 
-Install from the committed lock with `uv sync --extra dev --locked`. The `0.2.1` lock requires pytest `>=9.0.3` to avoid `PYSEC-2026-1845`; do not reintroduce an affected version.
+Install from the committed lock with `uv sync --extra dev --locked`. The `0.2.2` lock requires pytest `>=9.0.3` to avoid `PYSEC-2026-1845`; do not reintroduce an affected version.
 
 ## Start with the project contract
 
@@ -93,9 +93,9 @@ If the change adds a predicate, action type, scenario, adapter, metric, or repor
 
 Maintain all of the following:
 
-1. Assign authority from runtime provenance and policy, never from prose.
+1. Assign authority from runtime provenance and policy, never from prose, metadata, submitted timestamps, or caller-selected lifecycle time. Admission must use an injected trusted runtime clock and never fall back to `segment.created_at`.
 2. Keep external-untrusted material non-authoritative and in the external reference region.
-3. Preserve required principal constraints and active invariant definitions during compaction; report `budget_satisfied=false` rather than evicting them.
+3. In S0, preserve only verified-principal required instruction, constraint, and output-contract segments during compaction; caller metadata must not create protection. A trusted invariant registry is deferred to S1. Report `budget_satisfied=false` rather than evicting S0-protected segments.
 4. Apply enforcement before simulated mutation.
 5. Keep required tests, demos, and benchmarks local and simulator-only.
 6. Distinguish trace-chain integrity from logical decision-trace equality.

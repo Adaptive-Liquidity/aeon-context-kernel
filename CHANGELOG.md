@@ -2,6 +2,22 @@
 
 All notable changes are recorded here. The project follows explicit milestone and package-version boundaries; deterministic evidence versions are documented separately from real-model studies.
 
+## [0.2.2] — S0 trust-boundary remediation candidate
+
+### Security
+
+An external S0 review reported a High finding, **S0-001**: omitted admission time fell back to caller-controlled `segment.created_at`, allowing expiry/not-yet-valid lifecycle checks to be evaluated against an attacker-influenced timestamp. The review also reported **S0-002** (Low): caller metadata could mark a segment `active_invariant` and make it compaction-protected.
+
+This candidate removes the segment-time fallback, requires a policy-injected trusted runtime clock for every admission batch, threads the runner-owned controlled clock through benchmark adapters, and removes caller metadata from S0 compaction protection. New adversarial regressions cover expired and future attestations with attacker-chosen segment timestamps, required runtime-clock injection, naive-clock rejection, adapter clock wiring, and untrusted active-invariant metadata.
+
+### Audit status
+
+**Not cleared.** S0 remains failed/blocked pending a focused independent re-audit of S0-001 and S0-002. Internal tests, simulator smoke, passive auditing, and replay are remediation evidence only; they are not a substitute for the external decision.
+
+### Scope
+
+The changes remain simulator-only. They do not add S1 trusted-invariant registry semantics, production time/key services, real effects, providers, AEON-IQ integration, model-facing injection resistance, or real-model evaluation.
+
 ## [0.2.1] — S0 audit-environment security patch
 
 ### Security

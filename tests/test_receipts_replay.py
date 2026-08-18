@@ -5,9 +5,8 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from conftest import FIXED_TIME, TEST_AUTHORITY, make_action, make_segment
+from conftest import FIXED_TIME, make_action, make_policy, make_segment
 from context_kernel.adapters import SimulatedEffectAdapter
-from context_kernel.admission import AdmissionPolicy
 from context_kernel.assembly import ContextAssembler
 from context_kernel.canonical import canonical_hash
 from context_kernel.determinism import ControlledClock, stable_run_id
@@ -138,7 +137,7 @@ def test_receipt_contains_required_fields_and_round_trips_as_canonical_jsonl(
     tmp_path,
 ) -> None:
     segment = make_segment("principal", "Remain inside the workspace.")
-    decision = AdmissionPolicy(TEST_AUTHORITY).admit(segment)
+    decision = make_policy().admit(segment)
     assembly = ContextAssembler().assemble((segment,), (decision,))
     ledger = InvariantLedger(
         [
@@ -215,7 +214,7 @@ def test_receipt_contains_required_fields_and_round_trips_as_canonical_jsonl(
 
 def test_receipt_rejects_duplicate_verified_segment_uid() -> None:
     segment = make_segment("principal", "Remain inside the workspace.")
-    decision = AdmissionPolicy(TEST_AUTHORITY).admit(segment)
+    decision = make_policy().admit(segment)
     entry = SegmentDeliveryRecord(
         id=segment.segment.id,
         segment_uid=segment.provenance.segment_uid,

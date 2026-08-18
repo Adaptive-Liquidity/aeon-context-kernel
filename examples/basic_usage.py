@@ -54,7 +54,10 @@ segments = tuple(
     authority.issue(item, trust_class=item.trust_class, issued_at=now) for item in raw_segments
 )
 
-admission = AdmissionPolicy(authority).admit_many(segments)
+admission = AdmissionPolicy(
+    authority,
+    verification_clock=lambda: now,
+).admit_many(segments)
 assembly = ContextAssembler().assemble(segments, admission.decisions)
 
 ledger = InvariantLedger(

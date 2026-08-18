@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from conftest import TEST_AUTHORITY, make_segment
-from context_kernel.admission import AdmissionPolicy
+from conftest import TEST_AUTHORITY, make_policy, make_segment
 from context_kernel.assembly import AssemblyRegion, ContextAssembler
 from context_kernel.compaction import CompactionAction, DeterministicCompactor
 from context_kernel.models import LoadMode, Priority, Semantic, TrustClass
@@ -39,7 +38,7 @@ def test_assembly_separates_regions_and_never_promotes_external_text() -> None:
             trust_class=TrustClass.PRINCIPAL,
         ),
     )
-    batch = AdmissionPolicy(TEST_AUTHORITY).admit_many(segments)
+    batch = make_policy().admit_many(segments)
 
     assembly = ContextAssembler().assemble(segments, batch.decisions)
     regions = {entry.segment_id: entry.region for entry in assembly.entries}
@@ -66,7 +65,7 @@ def test_on_demand_and_retrieval_segments_require_explicit_activation() -> None:
         make_segment("lazy", "not yet", load_mode=LoadMode.ON_DEMAND),
         make_segment("retrieval", "not yet", load_mode=LoadMode.RETRIEVAL),
     )
-    decisions = AdmissionPolicy(TEST_AUTHORITY).admit_many(segments).decisions
+    decisions = make_policy().admit_many(segments).decisions
     assembler = ContextAssembler()
 
     initial = assembler.assemble(segments, decisions)
@@ -79,14 +78,14 @@ def test_on_demand_and_retrieval_segments_require_explicit_activation() -> None:
 
 def test_assembly_rejects_mismatched_decision_binding_before_rendering() -> None:
     segments = (make_segment("one", "first"), make_segment("two", "second"))
-    decisions = AdmissionPolicy(TEST_AUTHORITY).admit_many(segments).decisions
+    decisions = make_policy().admit_many(segments).decisions
     forged = decisions[0].model_copy(update={"segment_uid": segments[1].provenance.segment_uid})
 
     with pytest.raises(ValueError, match="duplicate decision segment_uid"):
         ContextAssembler().assemble(segments, (forged, decisions[1]))
 
 
-def test_compaction_is_deterministic_and_preserves_protected_segments() -> None:
+def test_compaction_is_deterministic_and_preserves_verified_principal_segments() -> None:
     segments = (
         make_segment(
             "required",
@@ -98,12 +97,13 @@ def test_compaction_is_deterministic_and_preserves_protected_segments() -> None:
         make_segment("support-a", "A " * 500),
         make_segment("support-b", "B " * 500),
         make_segment(
-            "invariant-definition",
-            "Active predicate definition " * 20,
+            "external-active-marker",
+            "Untrusted active marker " * 40,
+            trust_class=TrustClass.EXTERNAL_UNTRUSTED,
             metadata={"active_invariant": True},
         ),
     )
-    decisions = AdmissionPolicy(TEST_AUTHORITY).admit_many(segments).decisions
+    decisions = make_policy().admit_many(segments).decisions
     compactor = DeterministicCompactor(TEST_AUTHORITY, summary_characters=64)
 
     first = compactor.compact(
@@ -126,9 +126,11 @@ def test_compaction_is_deterministic_and_preserves_protected_segments() -> None:
     assert first.event == second.event
     assert first.assembly.assembly_hash == second.assembly.assembly_hash
     assert "required" in first.assembly.included_segment_ids
-    assert "invariant-definition" in first.assembly.included_segment_ids
+    assert "required" in first.event.protected_segment_ids
+    assert "external-active-marker" not in first.event.protected_segment_ids
     assert any(
-        record.action in {CompactionAction.SUMMARIZED, CompactionAction.EVICTED}
+        record.segment_id == "external-active-marker"
+        and record.action in {CompactionAction.SUMMARIZED, CompactionAction.EVICTED}
         for record in first.event.records
     )
 
@@ -143,7 +145,7 @@ def test_compaction_reports_unsatisfied_budget_instead_of_evicting_required() ->
             trust_class=TrustClass.PRINCIPAL,
         ),
     )
-    decisions = AdmissionPolicy(TEST_AUTHORITY).admit_many(segments).decisions
+    decisions = make_policy().admit_many(segments).decisions
 
     result = DeterministicCompactor(TEST_AUTHORITY).compact(
         segments,

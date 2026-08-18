@@ -37,3 +37,6 @@ reviewer-workspace/
 .DS_Store
 .idea/
 .vscode/
+
+# Local S0 remediation smoke, replay, and re-audit workspaces.
+.s0-remediation*/

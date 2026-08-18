@@ -2,7 +2,7 @@
 
 ## Canonical state
 
-The canonical repository is `https://github.com/Adaptive-Liquidity/aeon-context-kernel`. The current audit candidate is **v0.2.1**. S0 verifier-issued provenance, exact content binding, opaque segment identity, and one-to-one joins are implemented. An independent third-party S0 security review is still pending.
+The canonical repository is `https://github.com/Adaptive-Liquidity/aeon-context-kernel`. The prior v0.2.1 external S0 review returned a **Fail** summary with S0-001 (High: caller-influenced provenance lifecycle time) and S0-002 (Low: caller metadata could affect compaction residency). The current **v0.2.2 remediation candidate** implements narrow fixes, but an independent focused re-audit is still pending. Do not describe S0 as passed or cleared.
 
 Do **not** begin S1, provider integration, real effects, AEON-IQ integration, or real-model efficacy work until the independent S0 review has no unresolved Critical or High finding and required fixes are independently retested.
 
@@ -33,11 +33,11 @@ uv run pytest
 uv run ckernel bench smoke --results-root .ci-results
 ```
 
-The v0.2.1 lock requires pytest `>=9.0.3` to avoid `PYSEC-2026-1845`; do not reintroduce an affected version.
+The v0.2.2 lock requires pytest `>=9.0.3` to avoid `PYSEC-2026-1845`; do not reintroduce an affected version.
 
 ## Trust and implementation invariants
 
-Authority comes from verifier-issued runtime provenance and policy, never from segment prose or caller claims. Preserve exact content/UID/trust bindings through admission, assembly, compaction, receipts, and replay. Missing, duplicate, surplus, or mismatched bindings must fail closed. Enforcement must complete before any simulated state mutation. Required tests, demos, and benchmark stages remain simulator-only unless a later approved architecture gate explicitly says otherwise.
+Authority comes from verifier-issued runtime provenance and policy, never from segment prose, metadata, logical IDs, submitted timestamps, or caller-selected lifecycle time. Admission must receive a trusted runtime clock; no method may fall back to `segment.created_at`. Preserve exact content/UID/trust bindings through admission, assembly, compaction, receipts, and replay. Missing, duplicate, surplus, or mismatched bindings must fail closed. S0 compaction protection is limited to verified-principal required instruction, constraint, and output-contract segments; metadata cannot add protection, and a trusted invariant registry remains S1 work. Enforcement must complete before any simulated state mutation. Required tests, demos, and benchmark stages remain simulator-only unless a later approved architecture gate explicitly says otherwise.
 
 ## Claim boundaries
 
