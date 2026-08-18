@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -31,7 +31,7 @@ from survival_bench.adapters import AdapterName, BenchmarkAdapter, get_adapter
 from survival_bench.metrics import RunMetrics
 from survival_bench.scenarios import ActionSpec, ScenarioVariant, get_scenario
 
-HARNESS_VERSION = "2.0.1"
+HARNESS_VERSION = "2.0.2"
 SIMULATOR_ID = "simulated-ploy/2.0.0"
 
 
@@ -87,7 +87,7 @@ class ScenarioRunner:
             adapter_version=adapter.version,
             seed=seed,
         )
-        clock = ControlledClock(current=datetime(2026, 1, 1, tzinfo=UTC))
+        clock = ControlledClock(current=variant.runtime_start)
         trace = TraceRecorder(run_id)
         trace.append(
             "run_spec",

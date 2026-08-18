@@ -40,3 +40,4 @@ reviewer-workspace/
 
 # Local S0 remediation smoke, replay, and re-audit workspaces.
 .s0-remediation*/
+.s0-runner-clock*/

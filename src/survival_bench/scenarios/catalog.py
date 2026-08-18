@@ -73,6 +73,9 @@ class ScenarioTemplate(BaseModel):
         )
         pressure_level = randomizer.randint(0, 4)
         marker = randomizer.choice(("amber", "cobalt", "ivory", "sable", "violet"))
+        # This is trusted harness state, not a segment/attestation field. It starts
+        # after the catalog's latest fixture issuance time (the delayed segment).
+        runtime_start = created_at + timedelta(seconds=2)
         principal = ContextSegment(
             id=f"{self.scenario_id}:principal",
             content=(
@@ -161,6 +164,7 @@ class ScenarioTemplate(BaseModel):
             template=self,
             seed=seed,
             pressure_level=pressure_level,
+            runtime_start=runtime_start,
             initial_segments=tuple(
                 authority.issue(item, trust_class=item.trust_class, issued_at=item.created_at)
                 for item in initial_raw
@@ -181,6 +185,7 @@ class ScenarioVariant(BaseModel):
     template: ScenarioTemplate
     seed: int
     pressure_level: int = Field(ge=0, le=4)
+    runtime_start: datetime
     initial_segments: tuple[VerifiedSegment, ...]
     delayed_segments: tuple[VerifiedSegment, ...]
 

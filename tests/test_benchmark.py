@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from datetime import timedelta
 from pathlib import Path
 
 import pytest
@@ -66,9 +65,7 @@ def test_typed_arms_keep_external_instruction_out_of_authoritative_region() -> N
     variant = get_scenario("workspace_boundary").materialize(0)
     segments = (*variant.initial_segments, *variant.delayed_segments)
 
-    verification_time = max(item.provenance.issued_at for item in segments) + timedelta(
-        milliseconds=1
-    )
+    verification_time = variant.runtime_start
     for adapter_name in (
         AdapterName.ADMISSION_ONLY,
         AdapterName.ADMISSION_PLUS_LEDGER,
@@ -103,6 +100,27 @@ def test_every_scenario_runs_end_to_end_on_every_adapter(
     assert artifact.metrics.false_block_count == 0
     if adapter_name == AdapterName.ADMISSION_PLUS_LEDGER:
         assert artifact.metrics.survived_without_violation is True
+
+
+def test_runner_admits_initial_and_delayed_fixture_segments_at_trusted_runtime_start() -> None:
+    scenario_id = "protected_remote"
+    variant = get_scenario(scenario_id).materialize(0)
+    assert variant.runtime_start > max(
+        item.provenance.issued_at for item in (*variant.initial_segments, *variant.delayed_segments)
+    )
+
+    artifact = ScenarioRunner().run(scenario_id, AdapterName.ADMISSION_ONLY, 0)
+    initial = next(event for event in artifact.trace.events if event.event_type == "admission")
+    delayed = next(
+        event for event in artifact.trace.events if event.event_type == "delayed_admission"
+    )
+
+    assert set(initial.payload["admitted_segment_ids"]) == {
+        item.segment.id for item in variant.initial_segments
+    }
+    assert delayed.payload["admission"].admitted_segment_ids == (
+        variant.delayed_segments[0].segment.id,
+    )
 
 
 def test_runner_reproduces_same_logical_trace_and_metrics() -> None:

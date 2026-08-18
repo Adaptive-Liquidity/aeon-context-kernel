@@ -1,6 +1,6 @@
 # AEON Context Kernel S0: Comprehensive Independent Audit Handoff
 
-> **Historical baseline notice:** The v0.2.1 review recorded below produced an external **Fail** summary: S0-001 (High) and S0-002 (Low). It remains useful as the original audit target, but it is not the current approval target. The pending v0.2.2 remediation candidate and its focused re-audit requirements are in [`docs/releases/v0.2.2-s0-remediation.md`](../../releases/v0.2.2-s0-remediation.md). Do not treat the prior v0.2.1 evidence as a current S0 pass.
+> **Historical baseline notice:** The v0.2.1 review recorded below produced an external **Fail** summary: S0-001 (High) and S0-002 (Low). The v0.2.2 remediation candidate was then superseded after S0-003 (runner clock rejected valid fixture attestations). The current pending v0.2.3 correction and its focused re-audit requirements are in [`docs/releases/v0.2.3-s0-runner-clock-correction.md`](../../releases/v0.2.3-s0-runner-clock-correction.md). Do not treat prior v0.2.1/v0.2.2 evidence as a current S0 pass.
 
 **Prepared:** 2026-08-17
 **Review type:** Independent security review of **S0 identity and provenance only**
