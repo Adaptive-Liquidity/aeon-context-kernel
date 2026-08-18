@@ -2,6 +2,16 @@
 
 All notable changes are recorded here. The project follows explicit milestone and package-version boundaries; deterministic evidence versions are documented separately from real-model studies.
 
+## [0.2.3] — S0 runner-clock correction candidate
+
+### Security
+
+A post-merge review found **S0-003** in the v0.2.2 remediation candidate: the runner-owned controlled clock began before scenario fixture provenance issuance times, causing valid nonzero-index initial and delayed segments to reject as `attestation_not_yet_valid`. Version 0.2.3 adds a trusted scenario-harness `runtime_start`, initializes `ScenarioRunner` from it, and adds end-to-end assertions that expected initial and delayed fixture segments are admitted.
+
+### Audit status
+
+**Not cleared.** The v0.2.1 external S0 audit failed on S0-001/S0-002; v0.2.2 was superseded before focused re-audit because of S0-003. Version 0.2.3 remains blocked pending independent focused re-audit of all three findings.
+
 ## [0.2.2] — S0 trust-boundary remediation candidate
 
 ### Security

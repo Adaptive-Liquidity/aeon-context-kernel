@@ -4,14 +4,14 @@
 
 **AEON Context Kernel** is a standalone, local-first Python 3.12 reference implementation for verifier-issued context provenance, typed admission, executable invariants at simulated effect boundaries, context-delivery receipts, deterministic replay, and deterministic conformance/regression fixtures under controlled context pressure.
 
-> **Status: S0 remediation candidate; audit gate failed.** The external S0 review reported S0-001 (High: caller-influenced provenance lifecycle time) and S0-002 (Low: caller metadata could affect compaction residency). Version `0.2.2` is a narrow simulator-only remediation candidate, **not an audit pass**. Independent focused re-audit is required before any production use, provider integration, real effects, or S1 work.
+> **Status: S0 correction candidate; audit gate failed.** The external S0 review reported S0-001 (High: caller-influenced provenance lifecycle time) and S0-002 (Low: caller metadata could affect compaction residency). A post-merge review found S0-003 (runner clock rejected valid fixture attestations) in v0.2.2. Version `0.2.3` is the narrow simulator-only correction candidate, **not an audit pass**. Independent focused re-audit is required before any production use, provider integration, real effects, or S1 work.
 
 | Repository guide | Purpose |
 |---|---|
 | [`SECURITY.md`](SECURITY.md) | Private vulnerability reporting and supported security scope. |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Development setup, required checks, and claim boundaries. |
 | [`GOVERNANCE.md`](GOVERNANCE.md) | Milestone, merge, evidence, and release gates. |
-| [`docs/releases/v0.2.2-s0-remediation.md`](docs/releases/v0.2.2-s0-remediation.md) | Pending S0-001/S0-002 remediation candidate, verification record, and focused re-audit boundary. |
+| [`docs/releases/v0.2.3-s0-runner-clock-correction.md`](docs/releases/v0.2.3-s0-runner-clock-correction.md) | Pending S0-001/S0-002/S0-003 correction candidate, verification record, and focused re-audit boundary. |
 | [`docs/audits/s0/README.md`](docs/audits/s0/README.md) | Canonical phase-by-phase independent S0 audit handoff, baseline manifest, reviewer template, and release-asset instructions. |
 
 > A guardrail asks whether a request is bad. A context kernel asks whether a long-running AI workflow is still operating within the configuration and invariants its principal established—and can produce a trace showing why.
@@ -129,7 +129,7 @@ Detailed definitions and scoring methodology are in [`docs/benchmark-methodology
 
 ## Deterministic conformance result
 
-Generated result trees are intentionally excluded from ordinary source commits. The frozen v0.2.1 evidence archive remains historical release material; the pending v0.2.2 remediation candidate requires fresh focused re-audit evidence before publication. The outputs are deterministic simulator conformance/regression evidence, **not evidence about real-model safety, usefulness, or production model vendors**. The failed S0 gate and remediation status are documented in [`docs/releases/v0.2.2-s0-remediation.md`](docs/releases/v0.2.2-s0-remediation.md).
+Generated result trees are intentionally excluded from ordinary source commits. The frozen v0.2.1 evidence archive remains historical release material; the v0.2.2 remediation candidate was superseded by the pending v0.2.3 runner-clock correction, which requires fresh focused re-audit evidence before publication. The outputs are deterministic simulator conformance/regression evidence, **not evidence about real-model safety, usefulness, or production model vendors**. The failed S0 gate and correction status are documented in [`docs/releases/v0.2.3-s0-runner-clock-correction.md`](docs/releases/v0.2.3-s0-runner-clock-correction.md).
 
 | Arm | Runs | Survived without observed violation | Observed violations | Right-censored | False blocks |
 |---|---:|---:|---:|---:|---:|
