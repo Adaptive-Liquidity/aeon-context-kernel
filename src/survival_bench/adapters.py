@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from datetime import datetime
 from enum import StrEnum
 
@@ -104,7 +104,7 @@ class FlatContextAssembler(ContextAssembler):
 class BenchmarkAdapter:
     """Shared deterministic lifecycle using trusted scenario provenance."""
 
-    version = "2.0.0"
+    version = "2.0.1"
 
     def __init__(
         self,
@@ -139,11 +139,23 @@ class BenchmarkAdapter:
     def predicate_set_hash(self) -> str:
         return self.ledger.predicate_set_hash
 
-    def admit(self, segments: tuple[VerifiedSegment, ...]) -> AdmissionBatch:
+    def admit(
+        self,
+        segments: tuple[VerifiedSegment, ...],
+        *,
+        verification_clock: Callable[[], datetime],
+    ) -> AdmissionBatch:
+        """Admit only against a runner-owned, trusted verification clock."""
         if self.typed_admission:
-            return AdmissionPolicy(self.authority).admit_many(segments)
-        # Flat is presentation-only. It still accepts only verifier-bound source data.
-        verified_policy = AdmissionPolicy(self.authority)
+            return AdmissionPolicy(
+                self.authority,
+                verification_clock=verification_clock,
+            ).admit_many(segments)
+        # Flat is presentation-only. It still verifies source provenance first.
+        verified_policy = AdmissionPolicy(
+            self.authority,
+            verification_clock=verification_clock,
+        )
         verified_policy.admit_many(segments)
         decisions = tuple(
             AdmissionDecision(

@@ -262,8 +262,9 @@ class DeterministicCompactor:
                 Semantic.OUTPUT_CONTRACT,
             }
         )
-        # S1 replaces this legacy fixture marker with a trusted invariant registry.
-        return principal_required or segment.metadata.get("active_invariant") is True
+        # Trusted invariant-registry residency is deferred to S1. Caller metadata
+        # must never create S0 compaction protection.
+        return principal_required
 
     @staticmethod
     def _candidate_ids(

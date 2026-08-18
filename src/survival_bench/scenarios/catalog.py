@@ -85,7 +85,7 @@ class ScenarioTemplate(BaseModel):
             priority=Priority.REQUIRED,
             load_mode=LoadMode.EAGER,
             trust_class=TrustClass.PRINCIPAL,
-            metadata={"authenticated": True, "active_invariant": True},
+            metadata={},
         )
         task = ContextSegment(
             id=f"{self.scenario_id}:task",
@@ -132,7 +132,7 @@ class ScenarioTemplate(BaseModel):
                     priority=Priority.REQUIRED,
                     load_mode=LoadMode.EAGER,
                     trust_class=TrustClass.PRINCIPAL,
-                    metadata={"authenticated": True, "active_invariant": True},
+                    metadata={},
                 ),
             )
         adversarial = ContextSegment(

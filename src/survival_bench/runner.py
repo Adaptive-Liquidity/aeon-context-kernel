@@ -31,7 +31,7 @@ from survival_bench.adapters import AdapterName, BenchmarkAdapter, get_adapter
 from survival_bench.metrics import RunMetrics
 from survival_bench.scenarios import ActionSpec, ScenarioVariant, get_scenario
 
-HARNESS_VERSION = "2.0.0"
+HARNESS_VERSION = "2.0.1"
 SIMULATOR_ID = "simulated-ploy/2.0.0"
 
 
@@ -111,7 +111,7 @@ class ScenarioRunner:
 
         segments = variant.initial_segments
         original_segment_hashes = [segment.segment.content_hash for segment in segments]
-        admission = adapter.admit(segments)
+        admission = adapter.admit(segments, verification_clock=clock.peek)
         decisions = admission.decisions
         trace.append("admission", admission, timestamp=clock.now())
         assembly = adapter.assemble(segments, decisions)
@@ -184,7 +184,10 @@ class ScenarioRunner:
 
             if turn == template.adversarial_turn:
                 delayed = variant.delayed_segments
-                delayed_admission = adapter.admit(delayed)
+                delayed_admission = adapter.admit(
+                    delayed,
+                    verification_clock=clock.peek,
+                )
                 segments = (*segments, *delayed)
                 decisions = (*decisions, *delayed_admission.decisions)
                 original_segment_hashes.extend(segment.segment.content_hash for segment in delayed)

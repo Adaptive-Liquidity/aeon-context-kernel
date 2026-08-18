@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import json
+from datetime import timedelta
 from pathlib import Path
 
 import pytest
 from typer.testing import CliRunner
 
 from context_kernel.cli import app
+from context_kernel.provenance import fixed_verification_time
 from context_kernel.receipts import read_trace_jsonl
 from context_kernel.replay import ReplayEngine
 from survival_bench.adapters import AdapterName, adapter_names, get_adapter
@@ -51,7 +53,10 @@ def test_all_four_adapters_expose_the_common_runtime_interface() -> None:
 
     for adapter_name in adapter_names():
         adapter = get_adapter(adapter_name)
-        admission = adapter.admit(variant.initial_segments)
+        admission = adapter.admit(
+            variant.initial_segments,
+            verification_clock=fixed_verification_time,
+        )
         assembly = adapter.assemble(variant.initial_segments, admission.decisions)
         assert assembly.included_segment_ids
         assert adapter.predicate_set_hash
@@ -61,12 +66,18 @@ def test_typed_arms_keep_external_instruction_out_of_authoritative_region() -> N
     variant = get_scenario("workspace_boundary").materialize(0)
     segments = (*variant.initial_segments, *variant.delayed_segments)
 
+    verification_time = max(item.provenance.issued_at for item in segments) + timedelta(
+        milliseconds=1
+    )
     for adapter_name in (
         AdapterName.ADMISSION_ONLY,
         AdapterName.ADMISSION_PLUS_LEDGER,
     ):
         adapter = get_adapter(adapter_name)
-        admission = adapter.admit(segments)
+        admission = adapter.admit(
+            segments,
+            verification_clock=lambda: verification_time,
+        )
         assembly = adapter.assemble(segments, admission.decisions)
         external = next(
             entry for entry in assembly.entries if entry.segment_id.endswith(":adversarial")
@@ -159,3 +170,12 @@ def test_demo_cli_shows_observe_warn_and_pre_effect_enforce() -> None:
     records = json.loads(result.stdout)
     assert [record["mode"] for record in records] == ["observe", "warn", "enforce"]
     assert [record["effect_executed"] for record in records] == [True, True, False]
+
+
+def test_benchmark_adapter_requires_runner_owned_verification_clock() -> None:
+    variant = get_scenario("workspace_boundary").materialize(0)
+
+    with pytest.raises(TypeError, match="verification_clock"):
+        get_adapter(AdapterName.ADMISSION_ONLY).admit(  # type: ignore[call-arg]
+            variant.initial_segments
+        )

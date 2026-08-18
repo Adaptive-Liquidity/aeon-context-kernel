@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from datetime import datetime
 
 from context_kernel.canonical import canonical_hash
@@ -52,26 +52,31 @@ class AdmissionPolicy:
         self,
         authority: InMemoryProvenanceAuthority,
         *,
+        verification_clock: Callable[[], datetime],
         allowed_trust_classes: frozenset[TrustClass] | None = None,
         trusted_workspace_instruction_authority: bool = False,
     ) -> None:
         self.authority = authority
+        self._verification_clock = verification_clock
         self.allowed_trust_classes = (
             frozenset(TrustClass) if allowed_trust_classes is None else allowed_trust_classes
         )
         self.trusted_workspace_instruction_authority = trusted_workspace_instruction_authority
         self._consumed_attestation_ids: set[str] = set()
 
-    def admit(
+    def admit(self, verified_segment: VerifiedSegment) -> AdmissionDecision:
+        """Return a decision using only the policy's trusted runtime clock."""
+        return self._admit_at(verified_segment, verification_time=self._verification_time())
+
+    def _admit_at(
         self,
         verified_segment: VerifiedSegment,
         *,
-        now: datetime | None = None,
+        verification_time: datetime,
     ) -> AdmissionDecision:
-        """Return a deterministic decision for one verified segment."""
+        """Return a deterministic decision at one trusted runtime instant."""
         segment = verified_segment.segment
         provenance = verified_segment.provenance
-        verification_time = now or segment.created_at
         try:
             self.authority.verify(verified_segment, now=verification_time)
         except ProvenanceVerificationError as error:
@@ -148,12 +153,7 @@ class AdmissionPolicy:
             detail="Caller-submitted content requires verifier-issued provenance before admission.",
         )
 
-    def admit_many(
-        self,
-        segments: Iterable[VerifiedSegment],
-        *,
-        now: datetime | None = None,
-    ) -> AdmissionBatch:
+    def admit_many(self, segments: Iterable[VerifiedSegment]) -> AdmissionBatch:
         """Admit a one-to-one verified batch while rejecting identity collisions."""
         segment_list = tuple(segments)
         logical_ids = [item.segment.id for item in segment_list]
@@ -162,7 +162,10 @@ class AdmissionPolicy:
             raise ValueError("duplicate segment_id values are not admissible")
         if len(uids) != len(set(uids)):
             raise ValueError("duplicate segment_uid values are not admissible")
-        decisions = tuple(self.admit(segment, now=now) for segment in segment_list)
+        verification_time = self._verification_time()
+        decisions = tuple(
+            self._admit_at(segment, verification_time=verification_time) for segment in segment_list
+        )
         admitted = tuple(
             decision.segment_id
             for decision in decisions
@@ -189,6 +192,13 @@ class AdmissionPolicy:
             omitted_segment_ids=omitted,
             rejected_segment_ids=rejected,
         )
+
+    def _verification_time(self) -> datetime:
+        """Read the verifier time from trusted runtime policy, never segment data."""
+        verification_time = self._verification_clock()
+        if verification_time.tzinfo is None:
+            raise ValueError("verification clock must return a timezone-aware datetime")
+        return verification_time
 
     def _is_authoritative(self, semantic: Semantic, trust_class: TrustClass) -> bool:
         if semantic not in _AUTHORITY_SEMANTICS:

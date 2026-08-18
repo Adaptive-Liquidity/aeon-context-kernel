@@ -1,5 +1,7 @@
 # AEON Context Kernel S0: Comprehensive Independent Audit Handoff
 
+> **Historical baseline notice:** The v0.2.1 review recorded below produced an external **Fail** summary: S0-001 (High) and S0-002 (Low). It remains useful as the original audit target, but it is not the current approval target. The pending v0.2.2 remediation candidate and its focused re-audit requirements are in [`docs/releases/v0.2.2-s0-remediation.md`](../../releases/v0.2.2-s0-remediation.md). Do not treat the prior v0.2.1 evidence as a current S0 pass.
+
 **Prepared:** 2026-08-17
 **Review type:** Independent security review of **S0 identity and provenance only**
 **Canonical repository:** [Adaptive-Liquidity/aeon-context-kernel](https://github.com/Adaptive-Liquidity/aeon-context-kernel)
